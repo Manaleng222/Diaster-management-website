@@ -1,13 +1,116 @@
-﻿using APPR_P_2.Models;
+﻿
+using APPR_P_2.Data;
+using APPR_P_2.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace APPR_P_2.Controllers
 {
     public class DonationController : Controller
     {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        // Constructor with dependency injection
+        public DonationController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+     
+
+        // GET: Donation/ThankYou - Changed parameter from Guid to int
+        public async Task<IActionResult> ThankYou(int id)
+        {
+            if (_context != null)
+            {
+                var donation = await _context.Donations.FindAsync(id);
+                if (donation != null)
+                {
+                    ViewBag.DonationId = id;
+                    return View(donation);
+                }
+            }
+
+            ViewBag.DonationId = id;
+            return View();
+        }
+
+        // GET: Donation Index (for testing)
+        public async Task<IActionResult> Index()
+        {
+            if (_context == null)
+                return View(new List<Donation>());
+
+            var donations = await _context.Donations.ToListAsync();
+            return View(donations);
+        }
+
+        // GET: Donation/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Donation/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Donation donation)
+        {
+            if (_context != null && ModelState.IsValid)
+            {
+                _context.Add(donation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(donation);
+        }
+
+        // GET: Donation/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context == null)
+            {
+                return NotFound();
+            }
+
+            var donation = await _context.Donations
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (donation == null)
+            {
+                return NotFound();
+            }
+
+            return View(donation);
+        }
+
+        // POST: Donation/DeleteConfirmed
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var donation = await _context.Donations.FindAsync(id);
+            if (donation == null)
+            {
+                return NotFound();
+            }
+
+            _context.Donations.Remove(donation);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: Donation/Donate
-        public ActionResult Donate()
+        public IActionResult Donate()
         {
             // Populate dropdown lists
             ViewBag.DonationTypes = new[]
@@ -37,16 +140,39 @@ namespace APPR_P_2.Controllers
             return View();
         }
 
-        // POST: Donation/ProcessDonation
+        // POST: Donation/ProcessDonation - Fixed to return Task<IActionResult>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ProcessDonation(DonationViewModel model)
+        public async Task<IActionResult> ProcessDonation(DonationViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Process donation logic would go here
-                // For prototype, we'll just redirect to a thank you page
-                return RedirectToAction("ThankYou", new { id = Guid.NewGuid() });
+                if (_context != null)
+                {
+                    // Convert ViewModel to Entity Model
+                    var donation = new Donation
+                    {
+                        DonorId = "anonymous",
+                        DonationType = model.DonationType,
+                        Amount = model.DonationAmount,
+                        PaymentMethod = model.PaymentMethod,
+                        Supplies = model.Supplies ?? new List<string>(),
+                        AdditionalSupplies = model.AdditionalSupplies ?? string.Empty,
+                        DonationDate = DateTime.Now,
+                        IsAnonymous = model.DonateAnonymously,
+                        Status = "Completed"
+                    };
+
+                    _context.Add(donation);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("ThankYou", new { id = donation.Id });
+                }
+                else
+                {
+                    // Fallback for when context is not available
+                    return RedirectToAction("ThankYou", new { id = 1 });
+                }
             }
 
             // Repopulate dropdown lists if validation fails
@@ -76,12 +202,8 @@ namespace APPR_P_2.Controllers
 
             return View("Donate", model);
         }
-
-        // GET: Donation/ThankYou
-        public ActionResult ThankYou(Guid id)
-        {
-            ViewBag.DonationId = id;
-            return View();
-        }
     }
 }
+
+
+
