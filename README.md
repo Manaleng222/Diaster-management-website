@@ -70,16 +70,29 @@ APPR_P_2/
 │   ├── DonationController.cs
 │   ├── VolunteerController.cs
 │   └── HomeController.cs
+├── Data/
+│   ├──ApplicationDbContext.cs
+│   ├──SeedData.cs
 ├── Models/
+│   ├──AdminDashboardViewModel.cs
+│   ├──ApplicationUser.cs
+│   ├──Donation.cs
 │   ├── LoginViewModel.cs
 │   ├── RegisterViewModel.cs
 │   ├── DonationViewModel.cs
 │   ├── VolunteerViewModel.cs
+│   ├──VolunteerProfile.cs
 │   └── IncidentReportViewModel.cs
+│   ├──IncidentReport.cs
 ├── Views/
 │   ├── Account/
 │   │   ├── Login.cshtml
 │   │   └── Register.cshtml
+│   ├── Admin/
+│   │   └── Index.cshtml
+│   │   └──Indcident.cshtml
+│   │   └──Users.cshtml
+│   │   └──Volunteer.cshtml
 │   ├── Donation/
 │   │   └── Donate.cshtml
 │   ├── Volunteer/
@@ -277,7 +290,19 @@ dotnet test
 * CDN for static resources
 
 ---
+# Demo Credentials
 
+| Role      | Email                   | Password        |
+| --------- | ----------------------- | --------------- |
+| Admin     | `admin@disaster.org`    | `Admin123!`     |
+| Donor     | `donor@example.com`     | `Donor123!`     |
+| Volunteer | `volunteer@example.com` | `Volunteer123!` |
+
+> These demo credentials are for testing only. Do not use them in production.
+
+
+
+---
 ## 🤝 Contributing
 
 ### Workflow
@@ -341,8 +366,8 @@ The Azure DevOps pipeline automatically:
 
 ---
 
-##Author 
-*Tshepiso Mokhine
+### Author 
+- Tshepiso Mokhine
 
 ---
 
