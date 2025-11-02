@@ -1,4 +1,4 @@
-# 🌍 Disaster Allowance Foundation - ASP.NET MVC Prototype
+# 🌍 Disaster Allowance Foundation - ASP.NET CORE MVC 
 
 The **Disaster Allowance Foundation** is a comprehensive web application designed to facilitate disaster relief efforts through user management, incident reporting, donation processing, and volunteer coordination.
 This **ASP.NET MVC prototype** demonstrates the core functionality of a disaster response management system.
