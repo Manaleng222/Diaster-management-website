@@ -37,7 +37,7 @@ public static class TestDbContextFactory
                 Id = 2,
                 DonorId = "user2",
                 DonationType = "supplies",
-                Amount = null,
+                Amount = 100.50m,
                 PaymentMethod = "",
                 Supplies = new List<string> { "water", "food" },
                 AdditionalSupplies = "Emergency supplies",

@@ -1,40 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPR_P_2.Models
 {
     public class Donation
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        public string DonorId { get; set; }
-        public ApplicationUser Donor { get; set; }
+        public string DonorId { get; set; } = string.Empty;
 
         [Required]
-        [Display(Name = "Donation Type")]
-        public string DonationType { get; set; } // financial, supplies, both
+        [StringLength(20)]
+        public string DonationType { get; set; } = string.Empty;
 
-        [Display(Name = "Amount")]
-        [Range(0.01, 100000)]
-        public decimal? Amount { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? Amount { get; set; } // Changed to nullable
 
-        [Display(Name = "Payment Method")]
-        public string PaymentMethod { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string PaymentMethod { get; set; } = string.Empty;
 
         public List<string> Supplies { get; set; } = new List<string>();
 
-        [Display(Name = "Additional Supplies")]
-        public string AdditionalSupplies { get; set; } = string.Empty; // Default to empty string
+        public string? AdditionalSupplies { get; set; }
 
-        [Display(Name = "Donation Date")]
-        public DateTime DonationDate { get; set; } = DateTime.Now;
+        [Required]
+        public DateTime DonationDate { get; set; } = DateTime.UtcNow;
 
-        [Display(Name = "Anonymous")]
         public bool IsAnonymous { get; set; }
 
-        [Display(Name = "Status")]
-        public string Status { get; set; } = "Completed";
+        [Required]
+        [StringLength(20)]
+        public string Status { get; set; } = "Pending";
+
+        // Navigation properties
+        [ForeignKey("DonorId")]
+        public virtual ApplicationUser Donor { get; set; } = null!;
     }
 }

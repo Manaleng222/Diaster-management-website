@@ -211,7 +211,7 @@
                                                                 <h6>Donation Details</h6>
                                                                 <p>
                                                                     <strong>Type:</strong> @donation.DonationType<br />
-                                                                    <strong>Amount:</strong> @(donation.Amount?.ToString("C") ?? "N/A")<br />
+                                                                    <strong>Amount:</strong> @(donation.Amount.ToString() ?? "N/A")<br />
                                                                     <strong>Payment Method:</strong> @(donation.PaymentMethod ?? "N/A")<br />
                                                                     <strong>Date:</strong> @donation.DonationDate.ToString("MMM dd, yyyy HH:mm")
                                                                 </p>

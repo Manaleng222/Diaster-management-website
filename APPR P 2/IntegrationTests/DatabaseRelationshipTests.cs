@@ -10,7 +10,7 @@ namespace APPR_P_2.IntegrationTests
 {
     public class DatabaseRelationshipTests : IAsyncLifetime
     {
-        private ApplicationDbContext _context;
+        private ApplicationDbContext? _context;
 
         public async Task InitializeAsync()
         {
@@ -31,16 +31,19 @@ namespace APPR_P_2.IntegrationTests
 
         private async Task SeedRelationshipData()
         {
-            // Add user
+            // Add user with ALL required properties
             var user = new ApplicationUser
             {
                 Id = "test-user",
                 UserName = "test@relationship.com",
-                Email = "test@relationship.com"
+                Email = "test@relationship.com",
+                FirstName = "Test", // Add required property
+                LastName = "User",  // Add required property
+                EmailConfirmed = true
             };
             await _context.Users.AddAsync(user);
 
-            // Add donations for the user
+            // Add donations with ALL required properties
             var donations = new[]
             {
                 new Donation
@@ -48,14 +51,19 @@ namespace APPR_P_2.IntegrationTests
                     DonorId = "test-user",
                     DonationType = "financial",
                     Amount = 100.00m,
-                    Status = "Completed"
+                    PaymentMethod = "creditcard", // Add required property
+                    Status = "Completed",
+                    DonationDate = DateTime.UtcNow
                 },
                 new Donation
                 {
                     DonorId = "test-user",
                     DonationType = "supplies",
+                    Amount = 0, // Add default amount
+                    PaymentMethod = "none", // Add required property
                     Supplies = new System.Collections.Generic.List<string> { "food" },
-                    Status = "Completed"
+                    Status = "Completed",
+                    DonationDate = DateTime.UtcNow
                 }
             };
 

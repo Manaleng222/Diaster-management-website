@@ -175,7 +175,7 @@
                                         <tr>
                                             <td>@(donation.IsAnonymous ? "Anonymous" : donation.Donor?.FirstName)</td>
                                             <td>@donation.DonationType</td>
-                                            <td>@(donation.Amount?.ToString("C") ?? "Supplies")</td>
+                                            <td>@(donation.Amount.ToString() ?? "Supplies")</td>
                                             <td>@donation.DonationDate.ToString("MMM dd, yyyy")</td>
                                         </tr>
                                     }

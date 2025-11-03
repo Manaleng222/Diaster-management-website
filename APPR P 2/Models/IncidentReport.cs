@@ -8,24 +8,24 @@ namespace APPR_P_2.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public required string UserId { get; set; }
+        public required ApplicationUser User { get; set; }
 
         [Required]
         [Display(Name = "Incident Type")]
-        public string IncidentType { get; set; }
+        public required string IncidentType { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public required string Description { get; set; }
 
         [Required]
-        public string Location { get; set; }
+        public required string Location { get; set; }
 
         [Required]
-        public string Severity { get; set; }
+        public required string Severity { get; set; }
 
         [Required]
         [Display(Name = "Reported Date")]
